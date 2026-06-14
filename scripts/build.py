@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Post-scrape build step.
 
-Reads site/data/rates.json and:
-  1. writes site/data/rates.js  -> `window.__RATES__ = {...}`  (lets the
+Reads docs/data/rates.json and:
+  1. writes docs/data/rates.js  -> `window.__RATES__ = {...}`  (lets the
      dashboard work when opened as a local file:// without a server)
-  2. appends today's snapshot to site/data/history.jsonl  (one line per day;
+  2. appends today's snapshot to docs/data/history.jsonl  (one line per day;
      re-running on the same day overwrites that day's line) so the dashboard
      can show day-over-day trend arrows.
 
@@ -15,7 +15,7 @@ import os
 from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(ROOT, "site", "data")
+DATA = os.path.join(ROOT, "docs", "data")
 RATES_JSON = os.path.join(DATA, "rates.json")
 RATES_JS = os.path.join(DATA, "rates.js")
 HISTORY = os.path.join(DATA, "history.jsonl")

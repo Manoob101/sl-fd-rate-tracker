@@ -5,7 +5,7 @@ official rate page.
 
 ```
 fd/
-├── site/                     # the deployable static site
+├── docs/                     # the deployable static site
 │   ├── index.html            # the dashboard (reads data/rates.json)
 │   └── data/
 │       ├── rates.json        # ← source of truth (current rates)
@@ -25,7 +25,7 @@ fd/
 python3 scripts/serve.py      # opens http://localhost:8799 (or next free port)
 ```
 
-Or just double-click `site/index.html` (it falls back to the `rates.js` shim).
+Or just double-click `docs/index.html` (it falls back to the `rates.js` shim).
 
 ## How updating works
 
@@ -39,7 +39,7 @@ JavaScript-rendered or bot-protected and can't be parsed with plain regex):
   refreshed through a browser-based fetch (Claude-in-Chrome) during the daily run.
 
 The daily job follows [`UPDATE.md`](UPDATE.md): fetch each source → update
-`site/data/rates.json` → `python3 scripts/build.py`.
+`docs/data/rates.json` → `python3 scripts/build.py`.
 
 ### Schedule the daily run
 
@@ -54,9 +54,9 @@ run the recipe manually any time by pasting `UPDATE.md` into a session.)
 
 ## Deploy to the web (later)
 
-`site/` is a self-contained static folder — drop it on Vercel / Netlify / GitHub
-Pages. Point the host's root at `site/`. The scheduled agent's last step commits
-`site/data/` and pushes, which triggers a redeploy. No backend required.
+`docs/` is a self-contained static folder — drop it on Vercel / Netlify / GitHub
+Pages. Point the host's root at `docs/`. The scheduled agent's last step commits
+`docs/data/` and pushes, which triggers a redeploy. No backend required.
 
 ## Disclaimer
 

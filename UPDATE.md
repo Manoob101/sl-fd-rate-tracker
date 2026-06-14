@@ -4,7 +4,7 @@ This is the instruction set the scheduled Claude Code agent runs once per day to
 refresh the dashboard. (You can also just paste it into a Claude Code session.)
 
 ## Goal
-Update `site/data/rates.json` with today's Fixed Deposit rates for every bank in
+Update `docs/data/rates.json` with today's Fixed Deposit rates for every bank in
 `sources.json`, then run the build step. Be accurate; never invent a number.
 
 ## Steps
@@ -24,7 +24,7 @@ Update `site/data/rates.json` with today's Fixed Deposit rates for every bank in
      page text, and extract the FD table. If Chrome is unavailable, leave that
      bank's rates unchanged and keep its `status` as `stale`.
 
-3. For each bank, in `site/data/rates.json`:
+3. For each bank, in `docs/data/rates.json`:
    - If you got fresh numbers: update `rates`, set `status:"live"`,
      `scraped_at` = today (YYYY-MM-DD), set `effective` if the page shows a
      "w.e.f." date, and clear stale notes.
@@ -44,12 +44,12 @@ Update `site/data/rates.json` with today's Fixed Deposit rates for every bank in
 6. (When deployed) commit & push so the static host redeploys:
 
    ```bash
-   git add site/data && git commit -m "rates: $(date +%F)" && git push
+   git add docs/data && git commit -m "rates: $(date +%F)" && git push
    ```
 
 ## Notes
-- The dashboard reads `site/data/rates.json` (live) and falls back to the
-  generated `site/data/rates.js` shim for `file://` use. `build.py` regenerates
-  the shim and appends a dated snapshot to `site/data/history.jsonl` (used for
+- The dashboard reads `docs/data/rates.json` (live) and falls back to the
+  generated `docs/data/rates.js` shim for `file://` use. `build.py` regenerates
+  the shim and appends a dated snapshot to `docs/data/history.jsonl` (used for
   the up/down trend arrows).
 - One snapshot per day; re-running the same day overwrites that day's entry.

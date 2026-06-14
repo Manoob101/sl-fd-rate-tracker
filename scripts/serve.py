@@ -3,13 +3,13 @@
 
     python3 scripts/serve.py        # -> http://localhost:8799 (or next free port)
 
-Opening site/index.html directly as a file:// also works (it falls back to the
+Opening docs/index.html directly as a file:// also works (it falls back to the
 data/rates.js shim), but serving is closest to the deployed setup.
 """
 import http.server, os, socketserver, webbrowser
 
 PREFERRED = int(os.environ.get("PORT", "8799"))
-ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "site")
+ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs")
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
