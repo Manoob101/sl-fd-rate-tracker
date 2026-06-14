@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sri Lanka Fixed Deposit Rates — Live Tracker</title>
+<style>
+  :root{
+    --bg:#0b1f3a; --bg2:#0f2c52; --card:#ffffff; --ink:#0b1f3a; --muted:#5b6b82;
+    --line:#e6ebf2; --gold:#f5b301; --green:#0f9d58; --red:#d23f3f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,#0b1f3a,#143a6b);color:var(--ink);padding:28px 16px;}
+  .sheet{max-width:1080px;margin:0 auto;background:#f4f7fb;border-radius:22px;overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.45);}
+  header{background:linear-gradient(135deg,#0b1f3a 0%,#16407a 60%,#1d57a5 100%);color:#fff;
+    padding:34px 38px 30px;position:relative;overflow:hidden;}
+  header:before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;
+    background:radial-gradient(circle,rgba(245,179,1,.35),transparent 70%);}
+  .flag{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;}
+  header h1{font-size:34px;line-height:1.1;margin:8px 0 6px;font-weight:800;}
+  header p{color:#bcd0ec;font-size:15px;max-width:700px;}
+  .badges{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .asof{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:30px;font-size:13px;font-weight:600;}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 0 rgba(61,220,132,.7);
+    animation:pulse 2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(61,220,132,.6)}70%{box-shadow:0 0 0 8px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+  .highlights{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:24px 38px 6px;}
+  .hl{background:var(--card);border-radius:16px;padding:16px;box-shadow:0 6px 18px rgba(12,40,80,.08);border:1px solid var(--line);}
+  .hl .lab{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;}
+  .hl .big{font-size:26px;font-weight:800;color:var(--ink);margin-top:6px;}
+  .hl .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .hl .big span{color:var(--green);}
+  .sec{padding:22px 38px 6px;}
+  .sec h2{font-size:19px;color:var(--ink);display:flex;align-items:center;gap:10px;}
+  .sec h2:before{content:"";width:8px;height:22px;background:var(--gold);border-radius:3px;display:inline-block;}
+  .sec .note{font-size:12px;color:var(--muted);margin-top:4px;}
+  .tablewrap{padding:10px 38px 8px;}
+  table{width:100%;border-collapse:separate;border-spacing:0 8px;}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);text-align:center;padding:4px 8px;font-weight:700;cursor:pointer;user-select:none;}
+  th.bankcol{text-align:left;padding-left:14px;}
+  th .arrow{opacity:.4;font-size:9px;}
+  th.sorted .arrow{opacity:1;color:var(--ink);}
+  td{background:var(--card);padding:12px 8px;text-align:center;font-weight:700;font-size:15px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  td:first-child{border-left:1px solid var(--line);border-radius:12px 0 0 12px;text-align:left;}
+  td:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0;}
+  .bank{display:flex;align-items:center;gap:11px;padding-left:6px;}
+  .logo{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);flex:0 0 46px;overflow:hidden;padding:4px;}
+  .logo img{max-width:100%;max-height:100%;object-fit:contain;display:block;}
+  .bname{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.15;text-align:left;display:flex;align-items:center;gap:5px;}
+  .btag{font-size:10.5px;font-weight:600;color:var(--muted);}
+  .vchk{color:var(--green);font-weight:800;}
+  .vque{color:#c47f00;font-weight:800;}
+  .pill{font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;display:inline-block;}
+  .state{background:#e8f0ff;color:#1d57a5;}
+  .private{background:#f0ecff;color:#6a3df0;}
+  .finance{background:#e9f7ef;color:#0a7a42;}
+  .rate{position:relative;white-space:nowrap;}
+  .r-hi{color:#0a7a42;background:#e3f6ec!important;}
+  .r-mid{color:#9a6b00;background:#fff6e0!important;}
+  .r-lo{color:#7a5b00;background:#fcfbf5!important;}
+  .best{outline:2px solid var(--gold);}
+  .crown{font-size:10px;color:var(--gold);font-weight:800;display:block;margin-top:2px;}
+  .trend{font-size:10px;font-weight:800;margin-left:3px;}
+  .up{color:var(--green);} .down{color:var(--red);}
+  .min{font-weight:700;color:var(--ink);font-size:13px;}
+  .stale-row td{opacity:.93;}
+  .stbadge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:6px;background:#fff3da;color:#9a6b00;border:1px solid #f0d9a8;}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;padding:6px 40px 4px;font-size:12px;color:var(--muted);}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .sw{width:14px;height:14px;border-radius:4px;display:inline-block;}
+  footer{background:#0b1f3a;color:#9fb4d4;padding:20px 38px 26px;font-size:11.5px;line-height:1.6;margin-top:14px;}
+  footer b{color:#fff;}
+  .notes{padding:14px 38px 0;}
+  .notes .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .notes .n{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12px;color:#3a4a60;}
+  .notes .n b{color:var(--ink);}
+  .err{padding:40px;text-align:center;color:var(--muted);font-size:14px;}
+  @media(max-width:760px){
+    .highlights{grid-template-columns:1fr 1fr;}
+    header h1{font-size:26px;}
+    .tablewrap{overflow-x:auto;} table{min-width:760px;}
+    .notes .grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <div class="flag">🇱🇰 Sri Lanka · Fixed Deposits</div>
+    <h1>Fixed Deposit Rate Tracker — Live</h1>
+    <p>Standard published annual interest rates (% p.a.), interest paid at maturity, across major commercial &amp; state banks plus a leading finance company. Auto-updated daily from each institution's official rate sheet.</p>
+    <div class="badges" id="badges"></div>
+  </header>
+
+  <div class="highlights" id="highlights"></div>
+
+  <div class="sec">
+    <h2>Rates by Bank &amp; Tenure (% p.a.)</h2>
+    <div class="note">Click a column header to sort. <span class="vchk">●</span> = live (scraped today); <span class="vque">●</span> = stale (last-known, site blocked automated fetch). Arrows show change vs. the previous snapshot.</div>
+  </div>
+
+  <div class="tablewrap">
+    <table id="ratetable">
+      <thead><tr id="head"></tr></thead>
+      <tbody id="rows"><tr><td colspan="7" class="err">Loading rates…</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <span><i class="sw" style="background:#e3f6ec"></i> 9.0%+ (high)</span>
+    <span><i class="sw" style="background:#fff6e0"></i> 8.0–8.99% (mid)</span>
+    <span><i class="sw" style="background:#fcfbf5;border:1px solid #e6ebf2"></i> below 8.0% (lower)</span>
+    <span><i class="sw" style="background:#f5b301"></i> ★ / 👑 category leader</span>
+    <span><i class="trend up">▲</i>/<i class="trend down">▼</i> moved since last update</span>
+  </div>
+
+  <div class="notes">
+    <div class="grid">
+      <div class="n"><b>Bank vs Finance Co.</b> State banks (BOC, People's, NSB) carry a government guarantee; private banks usually pay more. LOLC is a licensed finance company (LFC), not a bank — higher rated risk, but deposits are CBSL-insured up to Rs 1.1m per customer.</div>
+      <div class="n"><b>How it updates.</b> A scheduled job fetches each bank's official rate page daily and rewrites the data this page reads. Banks marked <span class="stbadge">stale</span> have bot-protected or JavaScript-rendered sites — their rows fall back to last-known values and are refreshed via a browser-based fetch.</div>
+      <div class="n"><b>Payout &amp; tax.</b> Rates shown are interest-at-maturity. Monthly payout options are usually slightly lower. FD interest is subject to Withholding Tax (WHT) deducted at source — compare net returns.</div>
+      <div class="n"><b>Longer tenures pay more.</b> Several banks offer higher rates beyond 2 years and on special day-products (e.g. 100/200/300/400-day FDs) and senior-citizen / bulk deposits — ask the branch.</div>
+    </div>
+  </div>
+
+  <footer>
+    <b>Disclaimer:</b> Rates are indicative and change frequently without notice. This is not financial advice — always confirm the prevailing rate, minimum, payout terms and WHT directly with the bank before depositing.<br><br>
+    <b>Sources:</b> <span id="sources"></span> Logos are each bank's own brand mark, shown for identification only.
+  </footer>
+</div>
+
+<script src="data/rates.js" onerror="window.__shimFailed=true"></script>
+<script>
+const TENURES = ["3M","6M","1Y","2Y"];
+let sortKey = "1Y", sortDir = -1;
+
+function rateClass(v){ if(v==null) return ""; if(v>=9) return "r-hi"; if(v>=8) return "r-mid"; return "r-lo"; }
+function esc(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function fmt(v){ return v==null ? "—" : v.toFixed(2); }
+
+async function load(){
+  let data = window.__RATES__, history = window.__HISTORY__ || [];
+  if(!data){
+    try{
+      data = await (await fetch("data/rates.json",{cache:"no-store"})).json();
+      try{
+        const txt = await (await fetch("data/history.jsonl",{cache:"no-store"})).text();
+        history = txt.trim().split("\n").filter(Boolean).map(JSON.parse);
+      }catch(e){ history = []; }
+    }catch(e){
+      document.getElementById("rows").innerHTML =
+        '<tr><td colspan="7" class="err">Could not load data/rates.json. Run it over a local server: <code>python3 scripts/serve.py</code> (or open via the rates.js shim).</td></tr>';
+      return;
+    }
+  }
+  render(data, history);
+}
+
+function prevSnapshot(history){
+  // second-to-last distinct snapshot, for trend arrows
+  if(history.length < 2) return null;
+  return history[history.length-2];
+}
+
+function render(data, history){
+  const banks = data.banks.slice();
+  const prev = prevSnapshot(history);
+
+  // ---- best-of computations ----
+  const best = {};
+  TENURES.forEach(t=>{
+    let bv=-1, names=[];
+    banks.forEach(b=>{ const v=b.rates[t]; if(v!=null){ if(v>bv){bv=v;names=[b.short];} else if(v===bv){names.push(b.short);} }});
+    best[t]={v:bv,names};
+  });
+  const liveCount = banks.filter(b=>b.status==="live").length;
+  const minBank = banks.reduce((a,b)=>{
+    const pa=parseInt((a.min_deposit||"").replace(/\D/g,""))||1e12;
+    const pb=parseInt((b.min_deposit||"").replace(/\D/g,""))||1e12;
+    return pb<pa?b:a;
+  });
+
+  // ---- header badges ----
+  const asof = new Date(data.as_of);
+  const asofTxt = isNaN(asof) ? data.as_of : asof.toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  document.getElementById("badges").innerHTML =
+    `<span class="asof"><span class="live-dot"></span> Last updated ${esc(asofTxt)}</span>`+
+    `<span class="asof">${liveCount}/${banks.length} live today</span>`;
+
+  // ---- highlights ----
+  document.getElementById("highlights").innerHTML = `
+    <div class="hl"><div class="lab">🏆 Highest (≤2yr)</div><div class="big"><span>${fmt(best["2Y"].v)}%</span></div><div class="sub">${esc(best["2Y"].names.join(" & "))} · 2-year FD</div></div>
+    <div class="hl"><div class="lab">Best 1-Year</div><div class="big"><span>${fmt(best["1Y"].v)}%</span></div><div class="sub">${esc(best["1Y"].names.join(" & "))}</div></div>
+    <div class="hl"><div class="lab">Lowest Minimum</div><div class="big">${esc(minBank.min_deposit)}</div><div class="sub">${esc(minBank.name)}</div></div>
+    <div class="hl"><div class="lab">Live Today</div><div class="big">${liveCount} / ${banks.length}</div><div class="sub">${banks.length-liveCount} pending refresh</div></div>`;
+
+  // ---- table head ----
+  const cols = [["bank","Bank"],["type","Type"]].concat(TENURES.map(t=>[t,data.tenure_labels[t]])).concat([["min","Min. Deposit"]]);
+  document.getElementById("head").innerHTML = cols.map(([k,lab])=>{
+    const cls = (k==="bank"?"bankcol ":"") + (k===sortKey?"sorted":"");
+    const ar = TENURES.includes(k)||k==="min" ? ` <span class="arrow">${k===sortKey?(sortDir<0?"▼":"▲"):"▾"}</span>` : "";
+    return `<th class="${cls}" data-k="${k}">${esc(lab)}${ar}</th>`;
+  }).join("");
+
+  // ---- sort ----
+  banks.sort((a,b)=>{
+    let av,bv;
+    if(sortKey==="min"){ av=parseInt((a.min_deposit||"").replace(/\D/g,""))||0; bv=parseInt((b.min_deposit||"").replace(/\D/g,""))||0; }
+    else { av=a.rates[sortKey]??-1; bv=b.rates[sortKey]??-1; }
+    return (av-bv)*sortDir;
+  });
+
+  // ---- rows ----
+  const typeLabel={state:"State",private:"Private",finance:"Finance Co."};
+  document.getElementById("rows").innerHTML = banks.map(b=>{
+    const cells = TENURES.map(t=>{
+      const v=b.rates[t];
+      const isBest = best[t].names.includes(b.short) && best[t].v>0;
+      let trend="";
+      if(prev && prev.rates[b.id] && prev.rates[b.id][t]!=null && v!=null){
+        const d = +(v - prev.rates[b.id][t]).toFixed(2);
+        if(d>0) trend=`<span class="trend up" title="up ${d}">▲</span>`;
+        else if(d<0) trend=`<span class="trend down" title="down ${Math.abs(d)}">▼</span>`;
+      }
+      const crown = isBest ? `<span class="crown">${t==="2Y"?"👑":"★"} best</span>` : "";
+      return `<td class="rate ${rateClass(v)} ${isBest?"best":""}">${fmt(v)}${trend}${crown}</td>`;
+    }).join("");
+    const mark = b.status==="live" ? '<span class="vchk" title="Live — scraped today">●</span>' : '<span class="vque" title="Stale — last-known value">●</span>';
+    const tag = b.status==="live"
+      ? `${b.short}${b.effective?` · w.e.f. ${b.effective}`:""}`
+      : `${b.short} · <span class="stbadge">stale ${b.scraped_at}</span>`;
+    return `<tr class="${b.status!=="live"?"stale-row":""}">
+      <td><div class="bank"><div class="logo"><img src="${esc(b.logo)}" alt="${esc(b.name)} logo" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=${esc(b.domain)}&sz=128'"></div>
+        <div><div class="bname">${esc(b.name)} ${mark}</div><div class="btag">${tag}</div></div></div></td>
+      <td><span class="pill ${b.type}">${typeLabel[b.type]||b.type}</span></td>
+      ${cells}
+      <td><span class="min">${esc(b.min_deposit)}</span></td>
+    </tr>`;
+  }).join("");
+
+  // sources line
+  document.getElementById("sources").textContent =
+    banks.map(b=>b.source.replace(/^https?:\/\/(www\.)?/,"").replace(/\/$/,"")).join(" · ");
+
+  // header sort handlers
+  document.querySelectorAll("#head th").forEach(th=>{
+    const k=th.dataset.k;
+    if(k==="bank"||k==="type") return;
+    th.onclick=()=>{ if(sortKey===k){ sortDir*=-1; } else { sortKey=k; sortDir=-1; } render(data,history); };
+  });
+}
+
+load();
+</script>
+</body>
+</html>
