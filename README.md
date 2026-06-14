@@ -52,11 +52,16 @@ In Claude Code, run:
 That creates a cron cloud agent that updates the data each morning. (You can also
 run the recipe manually any time by pasting `UPDATE.md` into a session.)
 
-## Deploy to the web (later)
+## Live site
 
-`docs/` is a self-contained static folder — drop it on Vercel / Netlify / GitHub
-Pages. Point the host's root at `docs/`. The scheduled agent's last step commits
-`docs/data/` and pushes, which triggers a redeploy. No backend required.
+Hosted free on **GitHub Pages** → **https://manoob101.github.io/sl-fd-rate-tracker/**
+
+- Repo: https://github.com/Manoob101/sl-fd-rate-tracker
+- Pages serves the `docs/` folder on the `main` branch (Settings → Pages →
+  Source: `main` /docs). GitHub auto-rebuilds on every push — no Actions workflow
+  or backend needed.
+- The daily scheduled job rewrites `docs/data/rates.json`, runs `build.py`, then
+  `git push`es — which redeploys the live site within a minute or two.
 
 ## Disclaimer
 
