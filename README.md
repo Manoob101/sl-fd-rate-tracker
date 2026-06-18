@@ -11,11 +11,15 @@ fd/
 │       ├── rates.json        # ← source of truth (current rates)
 │       ├── rates.js          # generated shim (for file:// use)
 │       └── history.jsonl     # daily snapshots → trend arrows
-├── sources.json              # per-bank URLs + fetch method
+├── sources.json              # per-bank URLs + scrape rules (exclude/include/col)
 ├── scripts/
+│   ├── scrape.py             # Selenium scraper → updates rates.json
 │   ├── build.py              # regenerates shim + appends history
-│   └── serve.py              # local web server for the dashboard
-├── UPDATE.md                 # the daily scrape recipe (run by Claude)
+│   ├── serve.py              # local web server for the dashboard
+│   ├── daily.sh             # scrape + commit + push (run by launchd)
+│   └── com.fd.ratetracker.plist  # launchd schedule (07:00 daily)
+├── .venv/                    # python env with selenium (gitignored)
+├── UPDATE.md                 # how the daily update works
 └── README.md
 ```
 
@@ -29,28 +33,30 @@ Or just double-click `docs/index.html` (it falls back to the `rates.js` shim).
 
 ## How updating works
 
-Extraction is **Claude-powered** (chosen for robustness — half the bank sites are
-JavaScript-rendered or bot-protected and can't be parsed with plain regex):
+A **Selenium Python scraper** (`scripts/scrape.py`) loads each bank's official
+rate page in headless Chromium, reads the FD table (incl. JS-rendered / hidden
+tabs via `textContent`), and writes `docs/data/rates.json`. No API key, no Claude
+— it runs on its own. See [`UPDATE.md`](UPDATE.md) for the full details and
+per-bank tuning options.
 
-- 5 banks (ComBank, Seylan, People's, BOC, NSB) are fetchable directly via
-  `WebFetch` and show **live** rates scraped today.
-- 5 banks (HNB, Sampath, LOLC, Pan Asia, NTB) block automated fetches
-  (403/503/JS-only). They show last-known values flagged **stale**, and are
-  refreshed through a browser-based fetch (Claude-in-Chrome) during the daily run.
+- **Scraped live (verified):** Commercial, BOC, NSB, Sampath, People's.
+- **Last-known / `stale`:** HNB (page has no 24-month row), Seylan, NTB, Pan Asia,
+  LOLC — these have JS-only / consent-walled / ambiguous multi-product layouts and
+  are disabled (`scrape: false`) until a per-bank rule is written. They keep their
+  last-known values rather than showing a wrong one.
 
-The daily job follows [`UPDATE.md`](UPDATE.md): fetch each source → update
-`docs/data/rates.json` → `python3 scripts/build.py`.
+Safety: only 4–16% p.a. values are accepted; a bank goes `live` only when all four
+tenures are freshly read; otherwise it stays `stale`. The scraper never guesses.
 
-### Schedule the daily run
+### Daily schedule (launchd)
 
-In Claude Code, run:
-
+```bash
+cp scripts/com.fd.ratetracker.plist ~/Library/LaunchAgents/
+launchctl load ~/Library/LaunchAgents/com.fd.ratetracker.plist
 ```
-/schedule every day at 7am, follow the recipe in /Users/lasithmanuranga/fd/UPDATE.md
-```
 
-That creates a cron cloud agent that updates the data each morning. (You can also
-run the recipe manually any time by pasting `UPDATE.md` into a session.)
+Runs `scripts/daily.sh` at 07:00 local time: scrape → `build.py` → commit → push.
+Logs go to `logs/`. Run `bash scripts/daily.sh` any time to do it manually.
 
 ## Live site
 

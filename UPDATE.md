@@ -1,55 +1,53 @@
-# Daily FD-rate update recipe
+# Daily update — how it works
 
-This is the instruction set the scheduled Claude Code agent runs once per day to
-refresh the dashboard. (You can also just paste it into a Claude Code session.)
+Updating is now a **pure Selenium Python scraper** (no Claude / no API key). It
+runs unattended via `launchd` every morning.
 
-## Goal
-Update `docs/data/rates.json` with today's Fixed Deposit rates for every bank in
-`sources.json`, then run the build step. Be accurate; never invent a number.
+## The pipeline
 
-## Steps
+```
+launchd (07:00) → scripts/daily.sh
+                    ├─ .venv/bin/python scripts/scrape.py   # headless Chromium scrape
+                    │     → updates docs/data/rates.json
+                    │     → runs scripts/build.py (shim + history)
+                    └─ git add docs/data && commit && push  # GitHub Pages redeploys
+```
 
-1. Read `sources.json` for the list of banks, their official rate URLs, and the
-   `method` hint (`fetch` vs `browser`).
+## Run it manually
 
-2. For each bank, get the **standard / general-public LKR Fixed Deposit** rates,
-   **interest paid at maturity**, for tenures **3M, 6M, 1Y (12mo), 2Y (24mo)**,
-   plus the **minimum deposit**. Ignore savings, loan, card, FCY and senior /
-   bulk / special-product rates.
+```bash
+.venv/bin/python scripts/scrape.py            # all banks
+.venv/bin/python scripts/scrape.py boc nsb    # only some
+HEADLESS=0 .venv/bin/python scripts/scrape.py boc   # watch the browser
+bash scripts/daily.sh                          # full scrape + publish
+```
 
-   - `method: fetch`  → use the **WebFetch** tool on the `source` URL.
-   - `method: browser` → these sites (HNB, Sampath, LOLC, Pan Asia, NTB) block
-     plain fetches (403/503) or render rates with JavaScript. Use the
-     **Claude-in-Chrome** MCP: navigate to the `source` URL, read the rendered
-     page text, and extract the FD table. If Chrome is unavailable, leave that
-     bank's rates unchanged and keep its `status` as `stale`.
+## How the scraper picks the right number
 
-3. For each bank, in `docs/data/rates.json`:
-   - If you got fresh numbers: update `rates`, set `status:"live"`,
-     `scraped_at` = today (YYYY-MM-DD), set `effective` if the page shows a
-     "w.e.f." date, and clear stale notes.
-   - If you could **not** get numbers: leave `rates` as-is, set `status:"stale"`,
-     and keep `scraped_at` at the last successful date. **Do not guess.**
-   - Sanity check: FD rates for these banks are realistically ~5–14% p.a. Reject
-     anything outside that band (you probably grabbed a loan/card rate).
+For each bank in `sources.json` it loads the official rate page in headless
+Chromium (Brave's engine, since Chrome isn't installed), reads every table row —
+including hidden tabs via `textContent` — and maps each row to a tenure
+(3M/6M/1Y/2Y). Per-bank config in `sources.json` keeps it accurate:
 
-4. Set the top-level `as_of` to the current ISO timestamp (`+05:30`, Colombo).
+- `exclude` — row-text fragments that mark a row as NOT the standard product
+  (senior, monthly-payout, bulk, etc.). Added on top of `DEFAULT_EXCLUDE`.
+- `include` — a row must contain ALL these fragments to count (e.g. `"(lkr)"`).
+- `col`     — which numeric column holds the at-maturity rate (`0` first, `-1` last).
+- `scrape: false` — disable a site whose layout isn't reliably parseable yet;
+  its last-known values are kept and the bank is shown `stale`.
 
-5. Run the build step so the dashboard picks it up and history is recorded:
+Safety rules baked in: only rates in **4–16% p.a.** are accepted; a bank is
+marked `live` only when **all four tenures** are freshly read this run; otherwise
+the previous values are kept and the bank stays `stale`. **It never guesses.**
 
-   ```bash
-   python3 scripts/build.py
-   ```
+## Coverage today
 
-6. (When deployed) commit & push so the static host redeploys:
+| Scraped live (verified) | Last-known / stale (parser TODO) |
+|---|---|
+| Commercial, BOC, NSB, Sampath, People's | HNB* , Seylan, NTB, Pan Asia, LOLC |
 
-   ```bash
-   git add docs/data && git commit -m "rates: $(date +%F)" && git push
-   ```
-
-## Notes
-- The dashboard reads `docs/data/rates.json` (live) and falls back to the
-  generated `docs/data/rates.js` shim for `file://` use. `build.py` regenerates
-  the shim and appends a dated snapshot to `docs/data/history.jsonl` (used for
-  the up/down trend arrows).
-- One snapshot per day; re-running the same day overwrites that day's entry.
+\* HNB's page only lists 3M/6M/12M (no 24-month row), so it refreshes three
+tenures and stays `stale` on 2Y. NTB & Pan Asia render nothing to the scraper
+(JS SPA / consent wall); Seylan & LOLC have ambiguous multi-product layouts.
+Enable any of them later by writing its `include`/`col`/`exclude` rule and
+setting `scrape: true`.

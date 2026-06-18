@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- macOS launchd job: runs the daily FD scrape at 07:00 local time.
+     Install:  cp scripts/com.fd.ratetracker.plist ~/Library/LaunchAgents/
+               launchctl load ~/Library/LaunchAgents/com.fd.ratetracker.plist
+     (If the Mac is asleep at 07:00, launchd runs it at next wake.) -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.fd.ratetracker</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/lasithmanuranga/fd/scripts/daily.sh</string>
+  </array>
+
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key><integer>7</integer>
+    <key>Minute</key><integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/lasithmanuranga/fd/logs/launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/lasithmanuranga/fd/logs/launchd.err.log</string>
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>

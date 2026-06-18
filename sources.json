@@ -1,16 +1,16 @@
 {
-  "_comment": "Config for the daily scrape. Each bank lists its official rate page and how reliably it can be fetched automatically. 'fetch' = plain HTTP/WebFetch works; 'browser' = JS-rendered or bot-protected, needs a real browser (Claude-in-Chrome) or aggregator fallback.",
+  "_comment": "Bank registry for the Selenium scraper (scripts/scrape.py). 'source' is the official rate page. 'exclude' lists extra row-text fragments (case-insensitive) that mark a row as NOT the standard general-public interest-at-maturity FD (on top of the built-in DEFAULT_EXCLUDE in scrape.py).",
   "tenures": { "3M": "3 months", "6M": "6 months", "1Y": "12 months", "2Y": "24 months" },
   "banks": [
-    { "id": "combank", "name": "Commercial Bank",      "type": "private", "domain": "combank.lk",      "source": "https://www.combank.lk/rates-tariff",                   "method": "fetch"   },
-    { "id": "hnb",      "name": "Hatton National Bank", "type": "private", "domain": "hnb.lk",          "source": "https://www.hnb.lk/interest-rates",                     "method": "browser" },
-    { "id": "ntb",      "name": "Nations Trust Bank",   "type": "private", "domain": "nationstrust.com","source": "https://www.nationstrust.com/rates-and-charges",        "method": "browser" },
-    { "id": "sampath",  "name": "Sampath Bank",         "type": "private", "domain": "sampath.lk",      "source": "https://www.sampath.lk/rates-and-charges",              "method": "browser" },
-    { "id": "seylan",   "name": "Seylan Bank",          "type": "private", "domain": "seylan.lk",       "source": "https://www.seylan.lk/interest-rates",                  "method": "fetch"   },
-    { "id": "peoples",  "name": "People's Bank",        "type": "state",   "domain": "peoplesbank.lk",  "source": "https://www.peoplesbank.lk/interest-rates",             "method": "fetch"   },
-    { "id": "panasia",  "name": "Pan Asia Bank",        "type": "private", "domain": "pabcbank.com",    "source": "https://www.pabcbank.com/rates-and-tariff/",            "method": "browser" },
-    { "id": "lolc",     "name": "LOLC Finance",         "type": "finance", "domain": "lolcfinance.com", "source": "https://www.lolcfinance.com/rates-and-returns/interest-rates/", "method": "browser" },
-    { "id": "boc",      "name": "Bank of Ceylon",       "type": "state",   "domain": "boc.lk",          "source": "https://www.boc.lk/rates-tariff",                       "method": "fetch"   },
-    { "id": "nsb",      "name": "National Savings Bank","type": "state",   "domain": "nsb.lk",          "source": "https://www.nsb.lk/rates-tarriffs/rupee-deposit-rates/","method": "fetch"   }
+    { "id": "combank", "name": "Commercial Bank",      "type": "private", "domain": "combank.lk",      "source": "https://www.combank.lk/rates-tariff",                    "include": ["(lkr)"], "col": -1 },
+    { "id": "hnb",      "name": "Hatton National Bank", "type": "private", "domain": "hnb.lk",          "source": "https://www.hnb.lk/interest-rates",                      "exclude": [] },
+    { "id": "ntb",      "name": "Nations Trust Bank",   "type": "private", "domain": "nationstrust.com","source": "https://www.nationstrust.com/rates-and-charges",         "scrape": false },
+    { "id": "sampath",  "name": "Sampath Bank",         "type": "private", "domain": "sampath.lk",      "source": "https://www.sampath.lk/rates-and-charges",               "exclude": [] },
+    { "id": "seylan",   "name": "Seylan Bank",          "type": "private", "domain": "seylan.lk",       "source": "https://www.seylan.lk/interest-rates",                   "scrape": false },
+    { "id": "peoples",  "name": "People's Bank",        "type": "state",   "domain": "peoplesbank.lk",  "source": "https://www.peoplesbank.lk/interest-rates",              "exclude": ["wealth", "2 years", "3 years"] },
+    { "id": "panasia",  "name": "Pan Asia Bank",        "type": "private", "domain": "pabcbank.com",    "source": "https://www.pabcbank.com/rates-and-tariff/",             "scrape": false },
+    { "id": "lolc",     "name": "LOLC Finance",         "type": "finance", "domain": "lolcfinance.com", "source": "https://www.lolcfinance.com/rates-and-returns/interest-rates/", "scrape": false },
+    { "id": "boc",      "name": "Bank of Ceylon",       "type": "state",   "domain": "boc.lk",          "source": "https://www.boc.lk/rates-tariff",                        "exclude": [] },
+    { "id": "nsb",      "name": "National Savings Bank","type": "state",   "domain": "nsb.lk",          "source": "https://www.nsb.lk/rates-tarriffs/rupee-deposit-rates/", "exclude": ["1,000,000", "national savings"] }
   ]
 }
