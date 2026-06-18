@@ -1,98 +1,218 @@
 {
-  "as_of": "2026-06-14T18:00:00+05:30",
+  "as_of": "2026-06-18T17:13:32+05:30",
   "currency": "LKR",
-  "tenures": ["3M", "6M", "1Y", "2Y"],
-  "tenure_labels": { "3M": "3 Months", "6M": "6 Months", "1Y": "1 Year", "2Y": "2 Years" },
+  "tenures": [
+    "3M",
+    "6M",
+    "1Y",
+    "2Y"
+  ],
+  "tenure_labels": {
+    "3M": "3 Months",
+    "6M": "6 Months",
+    "1Y": "1 Year",
+    "2Y": "2 Years"
+  },
   "banks": [
     {
-      "id": "combank", "name": "Commercial Bank", "short": "ComBank", "type": "private",
-      "domain": "combank.lk", "source": "https://www.combank.lk/rates-tariff",
+      "id": "combank",
+      "name": "Commercial Bank",
+      "short": "ComBank",
+      "type": "private",
+      "domain": "combank.lk",
+      "source": "https://www.combank.lk/rates-tariff",
       "logo": "https://fd-rates-lk.vercel.app/banks/ComBank.png",
       "min_deposit": "Rs 25,000",
-      "rates": { "3M": 9.25, "6M": 10.00, "1Y": 10.25, "2Y": 11.25 },
-      "status": "live", "scraped_at": "2026-06-14", "effective": "",
+      "rates": {
+        "3M": 9.25,
+        "6M": 10.0,
+        "1Y": 10.25,
+        "2Y": 11.25
+      },
+      "status": "live",
+      "scraped_at": "2026-06-18",
+      "effective": "",
       "note": ""
     },
     {
-      "id": "hnb", "name": "Hatton National Bank", "short": "HNB", "type": "private",
-      "domain": "hnb.lk", "source": "https://www.hnb.lk/interest-rates",
+      "id": "hnb",
+      "name": "Hatton National Bank",
+      "short": "HNB",
+      "type": "private",
+      "domain": "hnb.lk",
+      "source": "https://www.hnb.lk/interest-rates",
       "logo": "https://fd-rates-lk.vercel.app/banks/HNB.png",
       "min_deposit": "Rs 25,000",
-      "rates": { "3M": 9.00, "6M": 9.75, "1Y": 10.00, "2Y": 11.25 },
-      "status": "stale", "scraped_at": "2026-06-10", "effective": "",
-      "note": "Site is JavaScript-rendered / bot-protected — needs browser fetch. Showing last-known values."
+      "rates": {
+        "3M": 9.6,
+        "6M": 9.65,
+        "1Y": 9.8,
+        "2Y": 11.25
+      },
+      "status": "stale",
+      "scraped_at": "2026-06-10",
+      "effective": "",
+      "note": "Auto-scrape incomplete on 2026-06-18; missing ['2Y']. Showing last-known."
     },
     {
-      "id": "ntb", "name": "Nations Trust Bank", "short": "NTB", "type": "private",
-      "domain": "nationstrust.com", "source": "https://www.nationstrust.com/rates-and-charges",
+      "id": "ntb",
+      "name": "Nations Trust Bank",
+      "short": "NTB",
+      "type": "private",
+      "domain": "nationstrust.com",
+      "source": "https://www.nationstrust.com/rates-and-charges",
       "logo": "https://fd-rates-lk.vercel.app/banks/NTB.png",
       "min_deposit": "Rs 25,000",
-      "rates": { "3M": 9.00, "6M": 9.75, "1Y": 10.00, "2Y": 11.00 },
-      "status": "stale", "scraped_at": "2026-06-10", "effective": "",
-      "note": "Automated fetch blocked — needs browser fetch. Showing last-known values."
+      "rates": {
+        "3M": 9.0,
+        "6M": 9.75,
+        "1Y": 10.0,
+        "2Y": 11.0
+      },
+      "status": "stale",
+      "scraped_at": "2026-06-10",
+      "effective": "",
+      "note": "Auto-scrape not yet supported for this site (complex/JS layout). Showing last-known."
     },
     {
-      "id": "sampath", "name": "Sampath Bank", "short": "Sampath", "type": "private",
-      "domain": "sampath.lk", "source": "https://www.sampath.lk/rates-and-charges",
+      "id": "sampath",
+      "name": "Sampath Bank",
+      "short": "Sampath",
+      "type": "private",
+      "domain": "sampath.lk",
+      "source": "https://www.sampath.lk/rates-and-charges",
       "logo": "https://fd-rates-lk.vercel.app/banks/Sampath.png",
       "min_deposit": "Rs 10,000",
-      "rates": { "3M": 8.50, "6M": 9.50, "1Y": 9.50, "2Y": 11.25 },
-      "status": "stale", "scraped_at": "2026-06-10", "effective": "",
-      "note": "Server returned 503 to automated fetch — needs browser fetch. Showing last-known values."
+      "rates": {
+        "3M": 8.5,
+        "6M": 9.5,
+        "1Y": 9.5,
+        "2Y": 11.25
+      },
+      "status": "live",
+      "scraped_at": "2026-06-18",
+      "effective": "",
+      "note": ""
     },
     {
-      "id": "seylan", "name": "Seylan Bank", "short": "Seylan", "type": "private",
-      "domain": "seylan.lk", "source": "https://www.seylan.lk/interest-rates",
+      "id": "seylan",
+      "name": "Seylan Bank",
+      "short": "Seylan",
+      "type": "private",
+      "domain": "seylan.lk",
+      "source": "https://www.seylan.lk/interest-rates",
       "logo": "https://fd-rates-lk.vercel.app/banks/Seylan.png",
       "min_deposit": "Rs 100,000",
-      "rates": { "3M": 8.50, "6M": 8.75, "1Y": 9.00, "2Y": 11.00 },
-      "status": "live", "scraped_at": "2026-06-14", "effective": "2026-06-04",
-      "note": "5 & 7-month FDs require a higher Rs 0.5M minimum."
+      "rates": {
+        "3M": 8.5,
+        "6M": 8.75,
+        "1Y": 9.0,
+        "2Y": 11.0
+      },
+      "status": "stale",
+      "scraped_at": "2026-06-16",
+      "effective": "2026-06-04",
+      "note": "Auto-scrape not yet supported for this site (complex/JS layout). Showing last-known."
     },
     {
-      "id": "peoples", "name": "People's Bank", "short": "People's", "type": "state",
-      "domain": "peoplesbank.lk", "source": "https://www.peoplesbank.lk/interest-rates",
+      "id": "peoples",
+      "name": "People's Bank",
+      "short": "People's",
+      "type": "state",
+      "domain": "peoplesbank.lk",
+      "source": "https://www.peoplesbank.lk/interest-rates",
       "logo": "https://fd-rates-lk.vercel.app/banks/People%27s.png",
       "min_deposit": "Rs 5,000",
-      "rates": { "3M": 7.25, "6M": 7.50, "1Y": 8.50, "2Y": 9.40 },
-      "status": "live", "scraped_at": "2026-06-14", "effective": "2026-06-09",
-      "note": "Govt guarantee. 'People's Wealth' FDs (Rs 250k+) pay more."
+      "rates": {
+        "3M": 7.25,
+        "6M": 7.5,
+        "1Y": 8.5,
+        "2Y": 9.4
+      },
+      "status": "live",
+      "scraped_at": "2026-06-18",
+      "effective": "2026-06-09",
+      "note": ""
     },
     {
-      "id": "panasia", "name": "Pan Asia Bank", "short": "PABC", "type": "private",
-      "domain": "pabcbank.com", "source": "https://www.pabcbank.com/rates-and-tariff/",
+      "id": "panasia",
+      "name": "Pan Asia Bank",
+      "short": "PABC",
+      "type": "private",
+      "domain": "pabcbank.com",
+      "source": "https://www.pabcbank.com/rates-and-tariff/",
       "logo": "https://fd-rates-lk.vercel.app/banks/PABC.png",
       "min_deposit": "Rs 10,000",
-      "rates": { "3M": 7.75, "6M": 8.00, "1Y": 8.50, "2Y": 9.25 },
-      "status": "stale", "scraped_at": "2026-06-10", "effective": "",
-      "note": "Automated fetch redirected/blocked — needs browser fetch. Showing last-known values."
+      "rates": {
+        "3M": 7.75,
+        "6M": 8.0,
+        "1Y": 8.5,
+        "2Y": 9.25
+      },
+      "status": "stale",
+      "scraped_at": "2026-06-10",
+      "effective": "",
+      "note": "Auto-scrape not yet supported for this site (complex/JS layout). Showing last-known."
     },
     {
-      "id": "lolc", "name": "LOLC Finance", "short": "LOFC", "type": "finance",
-      "domain": "lolcfinance.com", "source": "https://www.lolcfinance.com/rates-and-returns/interest-rates/",
+      "id": "lolc",
+      "name": "LOLC Finance",
+      "short": "LOFC",
+      "type": "finance",
+      "domain": "lolcfinance.com",
+      "source": "https://www.lolcfinance.com/rates-and-returns/interest-rates/",
       "logo": "https://www.lolcfinance.com/wp-content/themes/lolcfinance/assets/dist/images/lolcf_logo_v2.svg",
       "min_deposit": "Rs 5,000",
-      "rates": { "3M": 7.50, "6M": 7.50, "1Y": 8.00, "2Y": 8.50 },
-      "status": "stale", "scraped_at": "2026-06-10", "effective": "",
-      "note": "Licensed finance company (not a bank); CBSL-insured to Rs 1.1m. Fetch blocked (403) — last-known values."
+      "rates": {
+        "3M": 7.5,
+        "6M": 7.5,
+        "1Y": 8.0,
+        "2Y": 8.5
+      },
+      "status": "stale",
+      "scraped_at": "2026-06-10",
+      "effective": "",
+      "note": "Auto-scrape not yet supported for this site (complex/JS layout). Showing last-known."
     },
     {
-      "id": "boc", "name": "Bank of Ceylon", "short": "BOC", "type": "state",
-      "domain": "boc.lk", "source": "https://www.boc.lk/rates-tariff",
+      "id": "boc",
+      "name": "Bank of Ceylon",
+      "short": "BOC",
+      "type": "state",
+      "domain": "boc.lk",
+      "source": "https://www.boc.lk/rates-tariff",
       "logo": "https://fd-rates-lk.vercel.app/banks/BOC.png",
       "min_deposit": "Rs 10,000",
-      "rates": { "3M": 7.25, "6M": 7.50, "1Y": 7.25, "2Y": 7.50 },
-      "status": "live", "scraped_at": "2026-06-14", "effective": "2026-06-08",
-      "note": "Govt guarantee. Senior citizens earn more (e.g. 7.75% at 1Y/2Y)."
+      "rates": {
+        "3M": 7.25,
+        "6M": 7.5,
+        "1Y": 7.25,
+        "2Y": 7.5
+      },
+      "status": "live",
+      "scraped_at": "2026-06-18",
+      "effective": "2026-06-08",
+      "note": ""
     },
     {
-      "id": "nsb", "name": "National Savings Bank", "short": "NSB", "type": "state",
-      "domain": "nsb.lk", "source": "https://www.nsb.lk/rates-tarriffs/rupee-deposit-rates/",
+      "id": "nsb",
+      "name": "National Savings Bank",
+      "short": "NSB",
+      "type": "state",
+      "domain": "nsb.lk",
+      "source": "https://www.nsb.lk/rates-tarriffs/rupee-deposit-rates/",
       "logo": "https://fd-rates-lk.vercel.app/banks/NSB.png",
       "min_deposit": "Rs 1,000",
-      "rates": { "3M": 6.75, "6M": 7.00, "1Y": 7.25, "2Y": 7.75 },
-      "status": "live", "scraped_at": "2026-06-14", "effective": "2026-06-02",
-      "note": "Statutory 100% state guarantee on deposits."
+      "rates": {
+        "3M": 6.75,
+        "6M": 7.0,
+        "1Y": 7.25,
+        "2Y": 7.75
+      },
+      "status": "live",
+      "scraped_at": "2026-06-18",
+      "effective": "2026-06-02",
+      "note": ""
     }
   ]
 }
