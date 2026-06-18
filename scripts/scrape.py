@@ -165,6 +165,71 @@ def parse_effective(page_text):
     return ""
 
 
+def load_env():
+    """Load KEY=VALUE lines from a gitignored .env into os.environ (no deps)."""
+    path = os.path.join(ROOT, ".env")
+    if not os.path.exists(path):
+        return
+    for line in open(path, encoding="utf-8"):
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+
+
+LLM_MODEL = "claude-haiku-4-5-20251001"   # cheap, fast — fine for extraction
+
+
+def llm_extract(page_text, bank_name):
+    """Ask Claude to read the rendered page text and return the standard FD
+    rates. Returns {} on any failure (caller then keeps last-known / stale)."""
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if not key:
+        print(f"    (llm) no ANTHROPIC_API_KEY — skipping {bank_name}")
+        return {}
+    try:
+        import anthropic
+        client = anthropic.Anthropic(api_key=key)
+        prompt = (
+            f"From this {bank_name} (Sri Lanka) rate page, extract the STANDARD "
+            "general-public LKR Fixed Deposit annual interest rates, INTEREST PAID "
+            "AT MATURITY, for 3, 6, 12 and 24 months. Ignore savings, loans, "
+            "cards, foreign currency, senior-citizen, bulk and monthly-payout "
+            "rates. Reply with ONLY a JSON object like "
+            '{"3M":7.25,"6M":7.5,"1Y":8.5,"2Y":9.4} using numbers (percent p.a.); '
+            "use null for any tenure you cannot find with confidence.\n\n"
+            f"PAGE TEXT:\n{page_text[:9000]}"
+        )
+        msg = client.messages.create(
+            model=LLM_MODEL, max_tokens=300,
+            messages=[{"role": "user", "content": prompt}])
+        raw = msg.content[0].text
+        m = re.search(r"\{.*\}", raw, re.S)
+        data = json.loads(m.group(0)) if m else {}
+        out = {}
+        for t in ("3M", "6M", "1Y", "2Y"):
+            v = data.get(t)
+            if isinstance(v, (int, float)) and RATE_MIN <= v <= RATE_MAX:
+                out[t] = round(float(v), 2)
+        return out
+    except Exception as e:
+        print(f"    (llm) {bank_name}: {type(e).__name__}: {str(e)[:80]}")
+        return {}
+
+
+def render_text(driver, bank):
+    """Navigate (and optional click) then return the page's visible text — used
+    to feed the LLM fallback."""
+    driver.get(bank["source"])
+    try:
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    except Exception:
+        pass
+    time.sleep(3)
+    return (driver.find_element(By.TAG_NAME, "body").get_attribute("textContent") or "")
+
+
 def make_driver():
     opts = Options()
     if os.environ.get("HEADLESS", "1") != "0":
@@ -213,6 +278,7 @@ def scrape_bank(driver, bank):
 
 
 def main():
+    load_env()
     only = set(a.lower() for a in sys.argv[1:])
     with open(SOURCES, encoding="utf-8") as f:
         sources = json.load(f)["banks"]
@@ -231,16 +297,21 @@ def main():
             bank = by_id.get(bid)
             if not bank:
                 continue
-            if not src.get("scrape", True):
-                # parser for this site isn't trusted yet → keep last-known values
+            method = src.get("method", "rule")
+            if method != "llm" and not src.get("scrape", True):
+                # rule parser isn't trusted yet → keep last-known values
                 bank["status"] = "stale"
                 bank["note"] = "Auto-scrape not yet supported for this site (complex/JS layout). Showing last-known."
                 summary.append(f"  - {bid:9s} skipped (scrape disabled) — last-known kept")
                 continue
+            effective = ""
             try:
-                rates, effective = scrape_bank(driver, src)
+                if method == "llm":
+                    rates = llm_extract(render_text(driver, src), src["name"])
+                else:
+                    rates, effective = scrape_bank(driver, src)
             except Exception as e:
-                rates, effective = {}, ""
+                rates = {}
                 print(f"  ! {bid}: error {type(e).__name__}: {str(e)[:80]}")
 
             got = {t: v for t, v in rates.items() if v is not None}

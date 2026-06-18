@@ -9,5 +9,8 @@ __pycache__/
 # scraper logs
 logs/
 
+# secrets (LLM fallback key)
+.env
+
 # os
 .DS_Store

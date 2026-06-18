@@ -40,14 +40,28 @@ Safety rules baked in: only rates in **4–16% p.a.** are accepted; a bank is
 marked `live` only when **all four tenures** are freshly read this run; otherwise
 the previous values are kept and the bank stays `stale`. **It never guesses.**
 
-## Coverage today
+## Coverage
 
-| Scraped live (verified) | Last-known / stale (parser TODO) |
+| Rule-scraped live | LLM fallback (`method: llm`) |
 |---|---|
-| Commercial, BOC, NSB, Sampath, People's | HNB* , Seylan, NTB, Pan Asia, LOLC |
+| Commercial, BOC, NSB, Sampath, People's, HNB*, LOLC | NTB, Seylan, Pan Asia |
 
-\* HNB's page only lists 3M/6M/12M (no 24-month row), so it refreshes three
-tenures and stays `stale` on 2Y. NTB & Pan Asia render nothing to the scraper
-(JS SPA / consent wall); Seylan & LOLC have ambiguous multi-product layouts.
-Enable any of them later by writing its `include`/`col`/`exclude` rule and
-setting `scrape: true`.
+\* HNB's page lists only 3M/6M/12M (no 24-month row); it refreshes those three
+and keeps the last-known 2Y.
+
+### Hybrid LLM fallback
+
+NTB, Seylan and Pan Asia don't expose their FD rates in a machine-readable table
+(PDF-only / multi-product / no HTML table). For these, the scraper still renders
+the page with Selenium, then sends the page text to the Claude API
+(`llm_extract`, model `claude-haiku-4-5`) to pull the four standard at-maturity
+rates. Same safety rules apply (4–16% band; null tenures kept as last-known).
+
+This needs an API key. Create `.env` in the repo root (gitignored):
+
+```
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+Without the key those three banks simply stay `stale` — everything else still
+works. Cost is a fraction of a cent per day (three short Haiku calls).
