@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-06-18T17:13:32+05:30",
+  "as_of": "2026-06-18T17:28:27+05:30",
   "currency": "LKR",
   "tenures": [
     "3M",
@@ -49,10 +49,10 @@
         "1Y": 9.8,
         "2Y": 11.25
       },
-      "status": "stale",
-      "scraped_at": "2026-06-10",
+      "status": "live",
+      "scraped_at": "2026-06-18",
       "effective": "",
-      "note": "Auto-scrape incomplete on 2026-06-18; missing ['2Y']. Showing last-known."
+      "note": "2Y not listed on the page; last-known kept."
     },
     {
       "id": "ntb",
@@ -169,10 +169,10 @@
         "1Y": 8.0,
         "2Y": 8.5
       },
-      "status": "stale",
-      "scraped_at": "2026-06-10",
+      "status": "live",
+      "scraped_at": "2026-06-18",
       "effective": "",
-      "note": "Auto-scrape not yet supported for this site (complex/JS layout). Showing last-known."
+      "note": ""
     },
     {
       "id": "boc",
