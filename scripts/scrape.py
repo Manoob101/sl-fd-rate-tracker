@@ -94,6 +94,9 @@ def extract_rates(driver, cfg):
     excl = [e.lower() for e in DEFAULT_EXCLUDE + list(cfg.get("exclude", []))]
     incl = [i.lower() for i in cfg.get("include", [])]
     col = cfg.get("col", 0)
+    cell_idx = cfg.get("cell")          # read rate from this raw cell index
+    bare = cfg.get("bare_months")       # tenure label is a bare number of months
+    bare_map = {3: "3M", 6: "6M", 12: "1Y", 24: "2Y"}
     candidates = {}            # tenure -> list of (label_len, has_maturity, rate)
     for row in driver.find_elements(By.CSS_SELECTOR, "table tr"):
         raw = [(c.get_attribute("textContent") or "").strip()
@@ -112,15 +115,31 @@ def extract_rates(driver, cfg):
             if t:
                 label_idx, tenure = i, t
                 break
+        if tenure is None and bare:
+            m = re.fullmatch(r"0?(\d{1,2})", cells[0])
+            if m:
+                tenure = bare_map.get(int(m.group(1)))
+                label_idx = 0
         if tenure is None:
             continue
-        rates = row_rates(cells, label_idx)
-        if not rates:
-            continue
-        try:
-            rate = rates[col]
-        except IndexError:
-            rate = rates[-1] if col < 0 else rates[0]
+        if cell_idx is not None:                # fixed-column read (e.g. a 'maturity' col)
+            rate = None
+            if cell_idx < len(cells):
+                for mm in NUM_RE.finditer(cells[cell_idx]):
+                    v = float(mm.group(1) or mm.group(2))
+                    if RATE_MIN <= v <= RATE_MAX:
+                        rate = round(v, 2)
+                        break
+            if rate is None:
+                continue
+        else:
+            rates = row_rates(cells, label_idx)
+            if not rates:
+                continue
+            try:
+                rate = rates[col]
+            except IndexError:
+                rate = rates[-1] if col < 0 else rates[0]
         has_mat = "maturity" in cells[label_idx].lower()
         candidates.setdefault(tenure, []).append((len(cells[label_idx]), has_mat, rate))
 
@@ -177,6 +196,16 @@ def scrape_bank(driver, bank):
     except Exception:
         pass
     time.sleep(2.5)            # let late JS settle
+    clk = bank.get("click")    # open a tab/accordion before reading (e.g. LOLC)
+    if clk:
+        for el in driver.find_elements(By.XPATH, f"//*[contains(., '{clk}')]"):
+            try:
+                driver.execute_script("arguments[0].scrollIntoView({block:'center'});"
+                                      "arguments[0].click();", el)
+                time.sleep(0.4)
+            except Exception:
+                pass
+        time.sleep(2)
     rates = extract_rates(driver, bank)
     body = driver.find_element(By.TAG_NAME, "body")
     effective = parse_effective((body.get_attribute("textContent") or "")[:8000])
@@ -217,16 +246,19 @@ def main():
             got = {t: v for t, v in rates.items() if v is not None}
             for t, v in got.items():
                 bank["rates"][t] = v                 # update only what we found
-            if len(got) == 4:
+            miss = [t for t in ("3M", "6M", "1Y", "2Y") if t not in got]
+            # Live when all four are read, or (for pages that simply don't list a
+            # tenure) when 1Y + at least 3 are read this run.
+            if len(got) == 4 or ("1Y" in got and len(got) >= 3):
                 bank["status"] = "live"
                 bank["scraped_at"] = today
                 if effective:
                     bank["effective"] = effective
-                bank["note"] = ""
-                summary.append(f"  ✓ {bid:9s} live  {got}")
+                bank["note"] = (f"{', '.join(miss)} not listed on the page; last-known kept."
+                                if miss else "")
+                summary.append(f"  ✓ {bid:9s} live  {got}" + (f" (missing {miss})" if miss else ""))
             else:
                 bank["status"] = "stale"
-                miss = [t for t in ("3M", "6M", "1Y", "2Y") if t not in got]
                 bank["note"] = f"Auto-scrape incomplete on {today}; missing {miss}. Showing last-known."
                 summary.append(f"  ~ {bid:9s} stale (got {sorted(got) or 'nothing'}, missing {miss})")
     finally:
