@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-06-20T07:32:01+05:30",
+  "as_of": "2026-06-21T07:03:39+05:30",
   "currency": "LKR",
   "tenures": [
     "3M",
@@ -30,7 +30,7 @@
         "2Y": 11.25
       },
       "status": "live",
-      "scraped_at": "2026-06-20",
+      "scraped_at": "2026-06-21",
       "effective": "",
       "note": ""
     },
@@ -50,7 +50,7 @@
         "2Y": 11.25
       },
       "status": "live",
-      "scraped_at": "2026-06-20",
+      "scraped_at": "2026-06-21",
       "effective": "",
       "note": "2Y not listed on the page; last-known kept."
     },
@@ -72,7 +72,7 @@
       "status": "stale",
       "scraped_at": "2026-06-10",
       "effective": "",
-      "note": "Auto-scrape incomplete on 2026-06-20; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": "Auto-scrape incomplete on 2026-06-21; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
     },
     {
       "id": "sampath",
@@ -90,7 +90,7 @@
         "2Y": 11.25
       },
       "status": "live",
-      "scraped_at": "2026-06-20",
+      "scraped_at": "2026-06-21",
       "effective": "",
       "note": ""
     },
@@ -112,7 +112,7 @@
       "status": "stale",
       "scraped_at": "2026-06-16",
       "effective": "2026-06-04",
-      "note": "Auto-scrape incomplete on 2026-06-20; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": "Auto-scrape incomplete on 2026-06-21; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
     },
     {
       "id": "peoples",
@@ -130,7 +130,7 @@
         "2Y": 9.4
       },
       "status": "live",
-      "scraped_at": "2026-06-20",
+      "scraped_at": "2026-06-21",
       "effective": "2026-06-09",
       "note": ""
     },
@@ -152,7 +152,7 @@
       "status": "stale",
       "scraped_at": "2026-06-10",
       "effective": "",
-      "note": "Auto-scrape incomplete on 2026-06-20; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": "Auto-scrape incomplete on 2026-06-21; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
     },
     {
       "id": "lolc",
@@ -170,7 +170,7 @@
         "2Y": 8.5
       },
       "status": "live",
-      "scraped_at": "2026-06-20",
+      "scraped_at": "2026-06-21",
       "effective": "",
       "note": ""
     },
@@ -190,7 +190,7 @@
         "2Y": 7.5
       },
       "status": "live",
-      "scraped_at": "2026-06-20",
+      "scraped_at": "2026-06-21",
       "effective": "2026-06-08",
       "note": ""
     },
@@ -210,7 +210,7 @@
         "2Y": 7.75
       },
       "status": "live",
-      "scraped_at": "2026-06-20",
+      "scraped_at": "2026-06-21",
       "effective": "2026-06-02",
       "note": ""
     }
