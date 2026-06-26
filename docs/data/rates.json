@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-06-25T08:43:04+05:30",
+  "as_of": "2026-06-26T08:00:37+05:30",
   "currency": "LKR",
   "tenures": [
     "3M",
@@ -30,7 +30,7 @@
         "2Y": 11.25
       },
       "status": "live",
-      "scraped_at": "2026-06-25",
+      "scraped_at": "2026-06-26",
       "effective": "",
       "note": ""
     },
@@ -52,7 +52,7 @@
       "status": "stale",
       "scraped_at": "2026-06-23",
       "effective": "",
-      "note": "Auto-scrape incomplete on 2026-06-25; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": "Auto-scrape incomplete on 2026-06-26; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
     },
     {
       "id": "ntb",
@@ -72,7 +72,7 @@
       "status": "stale",
       "scraped_at": "2026-06-10",
       "effective": "",
-      "note": "Auto-scrape incomplete on 2026-06-25; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": "Auto-scrape incomplete on 2026-06-26; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
     },
     {
       "id": "sampath",
@@ -90,7 +90,7 @@
         "2Y": 11.25
       },
       "status": "live",
-      "scraped_at": "2026-06-25",
+      "scraped_at": "2026-06-26",
       "effective": "",
       "note": ""
     },
@@ -112,7 +112,7 @@
       "status": "stale",
       "scraped_at": "2026-06-16",
       "effective": "2026-06-04",
-      "note": "Auto-scrape incomplete on 2026-06-25; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": "Auto-scrape incomplete on 2026-06-26; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
     },
     {
       "id": "peoples",
@@ -129,10 +129,10 @@
         "1Y": 8.5,
         "2Y": 9.4
       },
-      "status": "stale",
-      "scraped_at": "2026-06-24",
+      "status": "live",
+      "scraped_at": "2026-06-26",
       "effective": "2026-06-09",
-      "note": "Auto-scrape incomplete on 2026-06-25; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": ""
     },
     {
       "id": "panasia",
@@ -152,7 +152,7 @@
       "status": "stale",
       "scraped_at": "2026-06-10",
       "effective": "",
-      "note": "Auto-scrape incomplete on 2026-06-25; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": "Auto-scrape incomplete on 2026-06-26; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
     },
     {
       "id": "lolc",
@@ -172,7 +172,7 @@
       "status": "stale",
       "scraped_at": "2026-06-24",
       "effective": "",
-      "note": "Auto-scrape incomplete on 2026-06-25; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": "Auto-scrape incomplete on 2026-06-26; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
     },
     {
       "id": "boc",
@@ -189,10 +189,10 @@
         "1Y": 7.25,
         "2Y": 7.5
       },
-      "status": "stale",
-      "scraped_at": "2026-06-24",
+      "status": "live",
+      "scraped_at": "2026-06-26",
       "effective": "2026-06-08",
-      "note": "Auto-scrape incomplete on 2026-06-25; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": ""
     },
     {
       "id": "nsb",
@@ -212,7 +212,7 @@
       "status": "stale",
       "scraped_at": "2026-06-24",
       "effective": "2026-06-02",
-      "note": "Auto-scrape incomplete on 2026-06-25; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
+      "note": "Auto-scrape incomplete on 2026-06-26; missing ['3M', '6M', '1Y', '2Y']. Showing last-known."
     }
   ]
 }
